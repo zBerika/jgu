@@ -1,7 +1,6 @@
 import random
 import string
 
-
 def read_orders_from_file(filename):
     with open(filename, 'r') as file:
         return file.readlines()
@@ -19,6 +18,11 @@ class Qarxana:
     def display_info(self):
         return f"{self.name} - {self.location}"
 
+class Client:
+    def __init__(self, customer_name, customer_id):
+        self.customer_name = customer_name
+        self.customer_id = customer_id
+
 class Engine:
     def __init__(self, engine_type, volume, h_p):
         self.engine_type = engine_type
@@ -28,35 +32,35 @@ class Engine:
     def display_info(self):
         return f"{self.engine_type}-{self.volume}L, {self.h_p} h.p."
 
-class Car(Qarxana):
-    def __init__(self, qarxana, model, color, year, engine: Engine, customer_info, car_type):
+class Car:
+    def __init__(self, qarxana, model, color, year, engine: Engine, client: Client, car_type):
         self.qarxana = qarxana
         self.model = model
         self.year = year
         self.color = color
         self.engine = engine
-        self.customer_info = customer_info
+        self.client = client
         self.car_type = car_type
-        self.vin = None
+        self.vin = VINGenerator.generate_vin()  # Генерация VIN-кода
 
     def display_info(self):
         return f"{self.year} {self.model} {self.color}, Qarxana: {self.qarxana.display_info()}, Engine: {self.engine.display_info()}"
 
-class Ford(Car, VINGenerator):
-    def __init__(self, qarxana, model, color, year, engine: Engine, customer_info, car_type):
-        super().__init__(qarxana, model, color, year, engine, customer_info, car_type)
-        self.vin = self.generate_vin()
-class Toyota(Ford):
+class Ford(Car):
     pass
 
-class Nissan(Ford):
+class Toyota(Car):
     pass
 
-class Chevrolet(Ford):
+class Nissan(Car):
     pass
 
-class Honda(Ford):
+class Chevrolet(Car):
     pass
+
+class Honda(Car):
+    pass
+
 created_cars = []
 
 def create_cars_from_orders(orders):
@@ -80,9 +84,13 @@ def create_cars_from_orders(orders):
 
         customer_name, customer_id, model_info, color, car_type, engine_type, engine_volume, engine_hp = parts
 
-
-        engine_volume = float(engine_volume)
-        engine_hp = float(engine_hp)
+        try:
+            customer_id = int(customer_id)
+            engine_volume = float(engine_volume)
+            engine_hp = float(engine_hp)
+        except ValueError:
+            print(f"Invalid number format in order: {order}")
+            continue
 
         engine = Engine(engine_type=engine_type, volume=engine_volume, h_p=engine_hp)
 
@@ -93,16 +101,19 @@ def create_cars_from_orders(orders):
             print(f"Ucnobi brendi: {brand}")
             continue
 
+        client = Client(customer_name, customer_id)
+
+        # Создание объекта автомобиля в зависимости от марки
         if "Ford" in model_info:
-            car = Ford(qarxana, model_info, color, 2024, engine, f"{customer_name}, {customer_id}",  car_type)
+            car = Ford(qarxana, model_info, color, 2024, engine, client, car_type)
         elif "Honda" in model_info:
-            car = Honda(qarxana, model_info, color, 2024, engine, f"{customer_name}, {customer_id}", car_type)
+            car = Honda(qarxana, model_info, color, 2024, engine, client, car_type)
         elif "Toyota" in model_info:
-            car = Toyota(qarxana, model_info, color, 2024, engine, f"{customer_name}, {customer_id}", car_type)
+            car = Toyota(qarxana, model_info, color, 2024, engine, client, car_type)
         elif "Chevrolet" in model_info:
-            car = Chevrolet(qarxana, model_info, color, 2024, engine, f"{customer_name}, {customer_id}", car_type)
+            car = Chevrolet(qarxana, model_info, color, 2024, engine, client, car_type)
         elif "Nissan" in model_info:
-            car = Nissan(qarxana, model_info, color, 2024, engine, f"{customer_name}, {customer_id}", car_type)
+            car = Nissan(qarxana, model_info, color, 2024, engine, client, car_type)
         else:
             print(f"Ucnobi brendi: {model_info}")
             continue
@@ -111,22 +122,41 @@ def create_cars_from_orders(orders):
 
     return created_cars
 
-
 def print_purchase_info(car):
-    customer_name, customer_id = car.customer_info.split(', ')
     factory_info = car.qarxana.display_info()  # Получаем информацию о заводе
-    print(f"VIN: {car.vin}, Clienti: {customer_name} ID: {customer_id}, "
+    print(f"VIN: {car.vin}, Clienti: {car.client.customer_name} ID: {car.client.customer_id}, "
           f"Modeli: {car.model}, Year: {car.year} Peri: {car.color}, Fabrika: {factory_info}, "
           f"Tipi: {car.car_type}, {car.engine.engine_type} - {car.engine.volume}L, {car.engine.h_p}HP")
 
+def check_car_exists(customer_id):
+    for car in created_cars:
+        if car.client.customer_id == customer_id:  # Сравниваем с идентификатором клиента
+            return car.display_info()  # Возвращаем информацию о автомобиле
+    return None  # Возвращаем None, если ID не найден
+
 if __name__ == "__main__":
-    #try:
+    try:
         orders = read_orders_from_file('sia.txt')
-        created_cars = create_cars_from_orders(orders)
+        create_cars_from_orders(orders)
 
         for car in created_cars:
             print_purchase_info(car)
-    #except FileNotFoundError:
-    #    print("'sia.txt'")
-    #except Exception as e:
-    #    print(f"KRASHHHHHHH: {e}")
+            a1 = car
+
+        id_to_check = input("Введите ID для проверки: ").strip()  # Нормализация ввода
+
+        if not id_to_check:
+            print("ID не может быть пустым.")
+        else:
+            try:
+                result = check_car_exists(int(id_to_check))  # Передаем ID как целое число
+                if result:
+                    print(f"Автомобиль для пользователя с ID {id_to_check} найден: {result}")
+                else:
+                    print(f"Автомобиль для пользователя с ID {id_to_check} не найден в списке.")
+            except ValueError:
+                print("Ошибка: ID должен быть числом.")
+    except FileNotFoundError:
+        print("'sia.txt' not found.")
+    except Exception as e:
+        print(f"Error: {e}")
