@@ -34,7 +34,7 @@ class Client:
         # Выбор случайного клиента из списка
         return Client(client_data["id"], client_data["name"])
 
-# Метод для вывода информации о покупке
+
 def print_purchase_info(client, car_model, car_color, car_body_type, car_engine_type, car_engine_volume, car_engine_hp):
     delay = random.uniform(0.1, 2)
     time.sleep(delay)
