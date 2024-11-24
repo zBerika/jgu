@@ -57,4 +57,4 @@ if __name__ == "__main__":
 
             print_purchase_info(client, car_model, car_color, car_body_type, car_engine_tupe, car_engine_volume, car_engine_hp)
 
-#os.system('python auto_qarxana.py')
+os.system('python auto_qarxana.py')
