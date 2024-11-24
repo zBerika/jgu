@@ -29,7 +29,7 @@ class Engine:
         return f"{self.engine_type}-{self.volume}L, {self.h_p} h.p."
 
 class Car:
-    def __init__(self, qarxana, color, model, year, engine: Engine, customer_info, car_type):
+    def __init__(self, qarxana, model, color, year, engine: Engine, customer_info, car_type):
         self.qarxana = qarxana
         self.model = model
         self.year = year
