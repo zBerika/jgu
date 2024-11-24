@@ -113,7 +113,7 @@ def create_cars_from_orders(orders):
 def print_purchase_info(car):
     customer_name, customer_id = car.customer_info.split(', ')
     print(f"VIN: {car.vin}, Clienti: {customer_name} ID: {customer_id}, Modeli: {car.model}, Peri: {car.color}, "
-          f": {car.car_type}, {car.engine.volume}L,  {car.engine.h_p}HP")
+          f": {car.car_type}, {car.engine.engine_type} - {car.engine.volume}L,  {car.engine.h_p}HP")
 
 if __name__ == "__main__":
     #try:
