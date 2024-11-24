@@ -28,7 +28,7 @@ class Engine:
     def display_info(self):
         return f"{self.engine_type}-{self.volume}L, {self.h_p} h.p."
 
-class Car:
+class Car(Qarxana):
     def __init__(self, qarxana, model, color, year, engine: Engine, customer_info, car_type):
         self.qarxana = qarxana
         self.model = model
@@ -40,7 +40,7 @@ class Car:
         self.vin = None
 
     def display_info(self):
-        return f"{self.year} {self.color} {self.model}, Qarxana: {self.qarxana.display_info()}, Engine: {self.engine.display_info()}"
+        return f"{self.year} {self.model} {self.color}, Qarxana: {self.qarxana.display_info()}, Engine: {self.engine.display_info()}"
 
 class Ford(Car, VINGenerator):
     def __init__(self, qarxana, model, color, year, engine: Engine, customer_info, car_type):
@@ -112,8 +112,10 @@ def create_cars_from_orders(orders):
 
 def print_purchase_info(car):
     customer_name, customer_id = car.customer_info.split(', ')
-    print(f"VIN: {car.vin}, Clienti: {customer_name} ID: {customer_id}, Modeli: {car.model}, Peri: {car.color}, "
-          f": {car.car_type}, {car.engine.engine_type} - {car.engine.volume}L,  {car.engine.h_p}HP")
+    factory_info = car.qarxana.display_info()  # Получаем информацию о заводе
+    print(f"VIN: {car.vin}, Clienti: {customer_name} ID: {customer_id}, "
+          f"Modeli: {car.model}, Year: {car.year} Peri: {car.color}, Fabrika: {factory_info}, "
+          f"Tipi: {car.car_type}, {car.engine.engine_type} - {car.engine.volume}L, {car.engine.h_p}HP")
 
 if __name__ == "__main__":
     #try:
