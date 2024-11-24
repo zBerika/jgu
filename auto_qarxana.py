@@ -57,9 +57,11 @@ class Chevrolet(Ford):
 
 class Honda(Ford):
     pass
+created_cars = []
 
 def create_cars_from_orders(orders):
-    cars = []
+    global created_cars
+    created_cars = []
 
     factories = {
         "Ford": Qarxana(name="Ford Factory", location="USA"),
@@ -105,9 +107,9 @@ def create_cars_from_orders(orders):
             print(f"Ucnobi brendi: {model_info}")
             continue
 
-        cars.append(car)
+        created_cars.append(car)
 
-    return cars
+    return created_cars
 
 
 def print_purchase_info(car):
