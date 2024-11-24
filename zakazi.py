@@ -44,7 +44,7 @@ def print_purchase_info(client, car_model, car_color, car_body_type, car_engine_
 
 if __name__ == "__main__":
     with open('sia.txt', 'w', encoding='utf-8') as file:
-        random_clients = random.sample(clients_names, 10)  # Случайный выбор 10 клиентов
+        random_clients = random.sample(clients_names, 10)
         for client_data in random_clients:
             client = Client.random_client(client_data)
             car_model = random.choice(car_models)
