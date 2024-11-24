@@ -1,0 +1,10 @@
+Sandro, 11, Ford Mustang, blue, SUV, Diesel, 2.5, 175
+Giorgi, 1, Honda Accord, black, SUV, Diesel, 2.5, 175
+David, 7, Honda Accord, gray, SUV, Gas, 2.5, 175
+Keti, 10, Chevrolet Malibu, gray, wagon, Gas, 3.0, 175
+Nino, 2, Nissan Altima, blue, sedan, Diesel, 3.0, 175
+Tamara, 4, Chevrolet Malibu, white, sedan, Diesel, 2.5, 200
+Irakli, 5, Nissan Altima, gray, SUV, Diesel, 3.0, 200
+Eka, 12, Chevrolet Malibu, red, hatchback, Diesel, 2.0, 175
+Mariam, 6, Toyota Camry, red, wagon, Diesel, 2.5, 150
+Zurab, 9, Nissan Altima, blue, hatchback, Gas, 1.5, 175
