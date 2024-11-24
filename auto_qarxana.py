@@ -41,24 +41,25 @@ class Car:
         self.engine = engine
         self.client = client
         self.car_type = car_type
-        self.vin = VINGenerator.generate_vin()  # Генерация VIN-кода
 
     def display_info(self):
         return f"{self.year} {self.model} {self.color}, Qarxana: {self.qarxana.display_info()}, Engine: {self.engine.display_info()}"
 
-class Ford(Car):
+class Ford(Car, VINGenerator):
+    def __init__(self, qarxana, model, color, year, engine: Engine, client: Client, car_type):
+        super().__init__(qarxana, model, color, year, engine, client, car_type)
+        self.vin = self.generate_vin()
+
+class Toyota(Ford):
     pass
 
-class Toyota(Car):
+class Nissan(Ford):
     pass
 
-class Nissan(Car):
+class Chevrolet(Ford):
     pass
 
-class Chevrolet(Car):
-    pass
-
-class Honda(Car):
+class Honda(Ford):
     pass
 
 created_cars = []
@@ -103,7 +104,7 @@ def create_cars_from_orders(orders):
 
         client = Client(customer_name, customer_id)
 
-        
+
         if "Ford" in model_info:
             car = Ford(qarxana, model_info, color, 2024, engine, client, car_type)
         elif "Honda" in model_info:
@@ -123,16 +124,16 @@ def create_cars_from_orders(orders):
     return created_cars
 
 def print_purchase_info(car):
-    factory_info = car.qarxana.display_info()  
+    factory_info = car.qarxana.display_info()
     print(f"VIN: {car.vin}, Clienti: {car.client.customer_name} ID: {car.client.customer_id}, "
           f"Modeli: {car.model}, Year: {car.year} Peri: {car.color}, Fabrika: {factory_info}, "
           f"Tipi: {car.car_type}, {car.engine.engine_type} - {car.engine.volume}L, {car.engine.h_p}HP")
 
 def check_car_exists(customer_id):
     for car in created_cars:
-        if car.client.customer_id == customer_id:  
-            return car.display_info()  
-    return None  
+        if car.client.customer_id == customer_id:
+            return car.display_info()
+    return None
 
 if __name__ == "__main__":
     try:
@@ -143,7 +144,7 @@ if __name__ == "__main__":
             print_purchase_info(car)
             a1 = car
 
-        id_to_check = input("Clientis ID: ").strip()  # Нормализация ввода
+        id_to_check = input("Clientis ID: ").strip()
 
         if not id_to_check:
             print("ID daweret.")
@@ -151,9 +152,9 @@ if __name__ == "__main__":
             try:
                 result = check_car_exists(int(id_to_check))  # Передаем ID как целое число
                 if result:
-                    print(f"Manqana momxvareblistvis ID {id_to_check} mzat aris: {result}")
+                    print(f"Manqana momxmareblistvis ID {id_to_check} mzat aris: {result}")
                 else:
-                    print(f"Manqana momxvareblistvi ID {id_to_check} ar aris.")
+                    print(f"Manqana momxmareblistvi ID {id_to_check} ar aris.")
             except ValueError:
                 print("!!!!: ID unda iyos ricxvi.")
     except FileNotFoundError:
